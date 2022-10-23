@@ -47,11 +47,11 @@ const movieSchema = new mongoose.Schema({
     required: true,
   },
   nameRU: {
-    ype: String,
+    type: String,
     required: true,
   },
   nameEN: {
-    ype: String,
+    type: String,
     required: true,
   },
 });
