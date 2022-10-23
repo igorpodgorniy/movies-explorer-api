@@ -51,18 +51,19 @@ const login = (req, res, next) => {
 
 const createUser = (req, res, next) => {
   const {
+    name,
     email,
     password,
   } = req.body;
   bcrypt.hash(password, 10)
     .then((hash) => User.create({
+      name,
       email,
       password: hash,
     }))
     .then(() => res.send({
-      data: {
-        email,
-      },
+      name,
+      email,
     }))
     .catch((err) => {
       if (err.name === 'ValidationError') {

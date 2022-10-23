@@ -3,7 +3,7 @@ const { celebrate, Joi } = require('celebrate');
 const regExp = require('../constants/constants');
 const {
   getMovies,
-  deleteMovies,
+  deleteMovie,
   createMovie,
 } = require('../controllers/movies');
 
@@ -32,6 +32,6 @@ routerMovies.delete('/:movieId', celebrate({
   params: Joi.object().keys({
     movieId: Joi.string().length(24).hex().required(),
   }),
-}), deleteMovies);
+}), deleteMovie);
 
 module.exports = routerMovies;
