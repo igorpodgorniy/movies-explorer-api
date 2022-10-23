@@ -29,7 +29,7 @@ router.get('/signout', (req, res) => {
 router.use(auth);
 
 router.use('/users', routerUsers);
-router.use('/cards', routerMovies);
+router.use('/movies', routerMovies);
 
 router.use((req, res, next) => {
   next(new NotFoundError('Такой страницы не существует'));

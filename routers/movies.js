@@ -15,11 +15,11 @@ routerMovies.post('/', celebrate({
   body: Joi.object().keys({
     country: Joi.string().required(),
     director: Joi.string().required(),
-    duration: Joi.string().required(),
+    duration: Joi.number().required(),
     year: Joi.string().required(),
     description: Joi.string().required(),
     image: Joi.string().pattern(regExp).required(),
-    trailer: Joi.string().pattern(regExp).required(),
+    trailerLink: Joi.string().pattern(regExp).required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
     thumbnail: Joi.string().pattern(regExp).required(),
