@@ -1,0 +1,21 @@
+{
+  "name": "diploma-movie",
+  "version": "1.0.0",
+  "description": "Бэкенд для проекта по работе с базой фильмов",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "lint": "npx eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/igorpodgorniy/movies-explorer-api.git"
+  },
+  "author": "Igor Podgorniy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/igorpodgorniy/movies-explorer-api/issues"
+  },
+  "homepage": "https://github.com/igorpodgorniy/movies-explorer-api#readme"
+}
