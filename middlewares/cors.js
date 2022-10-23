@@ -1,4 +1,6 @@
 const allowedCors = [
+  'http://api.movies.prakticum.nomoredomains.icu',
+  'https://api.movies.prakticum.nomoredomains.icu',
   'http://localhost:3000',
 ];
 
