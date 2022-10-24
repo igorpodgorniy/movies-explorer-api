@@ -8,12 +8,15 @@ const router = require('./routers');
 const cors = require('./middlewares/cors');
 const errorsProcessing = require('./middlewares/errors-processing');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const { LOCAL_HOST_DB } = require('./constants/constants');
 
-const { PORT = 3000 } = process.env;
+const { NODE_ENV, HOST_DB, PORT = 3000 } = process.env;
 
 const app = express();
 
-mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
+mongoose.connect(NODE_ENV === 'production'
+  ? HOST_DB
+  : LOCAL_HOST_DB, {
   useNewUrlParser: true,
 });
 
@@ -33,6 +36,4 @@ app.use(errors());
 
 app.use(errorsProcessing);
 
-app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}`);
-});
+app.listen(PORT, () => {});

@@ -22,14 +22,15 @@ router.post('/signup', celebrate({
     password: Joi.string().required(),
   }),
 }), createUser);
-router.get('/signout', (req, res) => {
-  res.clearCookie('token').send({ message: 'Выход' });
-});
 
 router.use(auth);
 
 router.use('/users', routerUsers);
 router.use('/movies', routerMovies);
+
+router.get('/signout', (req, res) => {
+  res.clearCookie('token').send({ message: 'Выход' });
+});
 
 router.use((req, res, next) => {
   next(new NotFoundError('Такой страницы не существует'));

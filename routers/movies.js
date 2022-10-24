@@ -1,6 +1,6 @@
 const routerMovies = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
-const regExp = require('../constants/constants');
+const { regExp } = require('../constants/constants');
 const {
   getMovies,
   deleteMovie,
