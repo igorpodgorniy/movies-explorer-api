@@ -1,27 +1,14 @@
 const router = require('express').Router();
-const { celebrate, Joi } = require('celebrate');
 const auth = require('../middlewares/auth');
 const routerUsers = require('./users');
 const routerMovies = require('./movies');
 const NotFoundError = require('../errors/not-found-error');
-const {
-  login,
-  createUser,
-} = require('../controllers/users');
+const { login, createUser } = require('../controllers/users');
+const { NOT_FOUND_PAGE_TEXT, EXIT_TEXT } = require('../constants/errors');
+const { signInValidation, signUpValidation } = require('../middlewares/validation');
 
-router.post('/signin', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
-  }),
-}), login);
-router.post('/signup', celebrate({
-  body: Joi.object().keys({
-    name: Joi.string().min(2).max(30).required(),
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
-  }),
-}), createUser);
+router.post('/signin', signInValidation, login);
+router.post('/signup', signUpValidation, createUser);
 
 router.use(auth);
 
@@ -29,11 +16,11 @@ router.use('/users', routerUsers);
 router.use('/movies', routerMovies);
 
 router.get('/signout', (req, res) => {
-  res.clearCookie('token').send({ message: 'Выход' });
+  res.clearCookie('token').send({ message: EXIT_TEXT });
 });
 
 router.use((req, res, next) => {
-  next(new NotFoundError('Такой страницы не существует'));
+  next(new NotFoundError(NOT_FOUND_PAGE_TEXT));
 });
 
 module.exports = router;

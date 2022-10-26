@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const regExp = require('../constants/constants');
+const isURL = require('validator/lib/isURL');
+const { URL_FORMAT_ERROR_TEXT } = require('../constants/errors');
 
 const movieSchema = new mongoose.Schema({
   country: {
@@ -25,17 +26,26 @@ const movieSchema = new mongoose.Schema({
   image: {
     type: String,
     required: true,
-    pattern: regExp,
+    validate: {
+      validator: (v) => isURL(v),
+      message: URL_FORMAT_ERROR_TEXT,
+    },
   },
   trailerLink: {
     type: String,
     required: true,
-    pattern: regExp,
+    validate: {
+      validator: (v) => isURL(v),
+      message: URL_FORMAT_ERROR_TEXT,
+    },
   },
   thumbnail: {
     type: String,
     required: true,
-    pattern: regExp,
+    validate: {
+      validator: (v) => isURL(v),
+      message: URL_FORMAT_ERROR_TEXT,
+    },
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,

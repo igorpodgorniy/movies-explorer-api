@@ -6,11 +6,17 @@ const NotFoundError = require('../errors/not-found-error');
 const ValidationError = require('../errors/validation-error');
 const ConflictError = require('../errors/conflict-error');
 const { LOCAL_JWT_SECRET } = require('../constants/constants');
+const {
+  USER_NOT_FOUND_TEXT,
+  INCORRECT_DATA_TEXT,
+  SUCCESS_AUTH_TEXT,
+  CONFLICT_USER_TEXT,
+} = require('../constants/errors');
 
 const getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
     .orFail(() => {
-      throw new NotFoundError('Пользователь с указанным id не существует');
+      throw new NotFoundError(USER_NOT_FOUND_TEXT);
     })
     .then((user) => res.send(user))
     .catch(next);
@@ -23,7 +29,10 @@ const updateProfile = (req, res, next) => {
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return next(new ValidationError('Были отправлены некорректные данные'));
+        return next(new ValidationError(INCORRECT_DATA_TEXT));
+      }
+      if (err.code === 11000) {
+        return next(new ConflictError(CONFLICT_USER_TEXT));
       }
       return next(err);
     });
@@ -45,7 +54,7 @@ const login = (req, res, next) => {
         maxAge: 3600000 * 24 * 7,
         httpOnly: true,
       });
-      res.send({ message: 'Авторизация прошла успешно' });
+      res.send({ message: SUCCESS_AUTH_TEXT });
     })
     .catch(next);
 };
@@ -68,10 +77,10 @@ const createUser = (req, res, next) => {
     }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return next(new ValidationError('Были отправлены некорректные данные'));
+        return next(new ValidationError(INCORRECT_DATA_TEXT));
       }
       if (err.code === 11000) {
-        return next(new ConflictError('Пользователь с указанным email уже существует'));
+        return next(new ConflictError(CONFLICT_USER_TEXT));
       }
       return next(err);
     });

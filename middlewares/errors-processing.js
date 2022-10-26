@@ -1,4 +1,4 @@
-const { DEFAULT_ERROR } = require('../constants/errors');
+const { DEFAULT_ERROR, DEFAULT_ERROR_TEXT } = require('../constants/errors');
 
 const errorsProcessing = ((err, req, res, next) => {
   const { statusCode = DEFAULT_ERROR, message } = err;
@@ -7,7 +7,7 @@ const errorsProcessing = ((err, req, res, next) => {
     .status(statusCode)
     .send({
       message: statusCode === DEFAULT_ERROR
-        ? 'На сервере произошла ошибка'
+        ? DEFAULT_ERROR_TEXT
         : message,
     });
 

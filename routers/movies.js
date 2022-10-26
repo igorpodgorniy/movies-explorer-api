@@ -1,6 +1,5 @@
 const routerMovies = require('express').Router();
-const { celebrate, Joi } = require('celebrate');
-const { regExp } = require('../constants/constants');
+const { movieParamsValidation, movieIdValidation } = require('../middlewares/validation');
 const {
   getMovies,
   deleteMovie,
@@ -11,27 +10,9 @@ const {
 routerMovies.get('/', getMovies);
 
 // Сохраняем в избранное фильм с переданными в теле параметрами
-routerMovies.post('/', celebrate({
-  body: Joi.object().keys({
-    country: Joi.string().required(),
-    director: Joi.string().required(),
-    duration: Joi.number().required(),
-    year: Joi.string().required(),
-    description: Joi.string().required(),
-    image: Joi.string().pattern(regExp).required(),
-    trailerLink: Joi.string().pattern(regExp).required(),
-    nameRU: Joi.string().required(),
-    nameEN: Joi.string().required(),
-    thumbnail: Joi.string().pattern(regExp).required(),
-    movieId: Joi.number().required(),
-  }),
-}), createMovie);
+routerMovies.post('/', movieParamsValidation, createMovie);
 
 // Удаляем сохранённый фильм по id
-routerMovies.delete('/:movieId', celebrate({
-  params: Joi.object().keys({
-    movieId: Joi.string().length(24).hex().required(),
-  }),
-}), deleteMovie);
+routerMovies.delete('/:movieId', movieIdValidation, deleteMovie);
 
 module.exports = routerMovies;
