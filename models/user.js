@@ -5,7 +5,7 @@ const UnauthorizedError = require('../errors/unauthorized-error');
 const {
   EMAIL_FORMAT_ERROR_TEXT,
   WRONG_AUTH_DATA_TEXT,
-} = require('../constants/constants');
+} = require('../constants/errors');
 
 const userSchema = new mongoose.Schema({
   name: {
