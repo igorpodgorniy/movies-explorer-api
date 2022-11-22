@@ -12,7 +12,7 @@ const errorsProcessing = require('./middlewares/errors-processing');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { LOCAL_HOST_DB } = require('./constants/constants');
 
-const { NODE_ENV, HOST_DB, PORT = 3000 } = process.env;
+const { NODE_ENV, HOST_DB, PORT = 3001 } = process.env;
 
 const app = express();
 

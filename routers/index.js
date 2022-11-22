@@ -9,15 +9,14 @@ const { signInValidation, signUpValidation } = require('../middlewares/validatio
 
 router.post('/signin', signInValidation, login);
 router.post('/signup', signUpValidation, createUser);
+router.get('/signout', (req, res) => {
+  res.clearCookie('token').send({ message: EXIT_TEXT });
+});
 
 router.use(auth);
 
 router.use('/users', routerUsers);
 router.use('/movies', routerMovies);
-
-router.get('/signout', (req, res) => {
-  res.clearCookie('token').send({ message: EXIT_TEXT });
-});
 
 router.use((req, res, next) => {
   next(new NotFoundError(NOT_FOUND_PAGE_TEXT));

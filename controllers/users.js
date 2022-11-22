@@ -13,6 +13,28 @@ const {
   CONFLICT_USER_TEXT,
 } = require('../constants/errors');
 
+const { NODE_ENV, JWT_SECRET } = process.env;
+
+function signUser(user, res) {
+  const token = jwt.sign(
+    { _id: user._id },
+    NODE_ENV === 'production' ? JWT_SECRET : LOCAL_JWT_SECRET,
+    { expiresIn: '7d' },
+  );
+
+  res.cookie('token', token, {
+    maxAge: 3600000 * 24 * 7,
+    httpOnly: true,
+  });
+  res.send({
+    data: {
+      name: user.name,
+      email: user.email,
+    },
+    message: SUCCESS_AUTH_TEXT,
+  });
+}
+
 const getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
     .orFail(() => {
@@ -40,21 +62,10 @@ const updateProfile = (req, res, next) => {
 
 const login = (req, res, next) => {
   const { email, password } = req.body;
-  const { NODE_ENV, JWT_SECRET } = process.env;
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign(
-        { _id: user._id },
-        NODE_ENV === 'production' ? JWT_SECRET : LOCAL_JWT_SECRET,
-        { expiresIn: '7d' },
-      );
-
-      res.cookie('token', token, {
-        maxAge: 3600000 * 24 * 7,
-        httpOnly: true,
-      });
-      res.send({ message: SUCCESS_AUTH_TEXT });
+      signUser(user, res);
     })
     .catch(next);
 };
@@ -71,10 +82,9 @@ const createUser = (req, res, next) => {
       email,
       password: hash,
     }))
-    .then(() => res.send({
-      name,
-      email,
-    }))
+    .then((user) => {
+      signUser(user, res);
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return next(new ValidationError(INCORRECT_DATA_TEXT));
